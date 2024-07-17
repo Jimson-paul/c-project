@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_BOOKS 100
+#define MAX_SALES 1000
+
+struct Book {
+    int bookID;
+    char title[100];
+    char author[50];
+    int stockQuantity;
+    float price;
+};
+
+struct SalesRecord {
+    int saleID;
+    int bookID;
+    int quantitySold;
+    float totalPrice;
+};
+
+struct Book inventory[MAX_BOOKS];
+struct SalesRecord salesRecords[MAX_SALES];
+int numBooks = 0;
+int numSales = 0;
+
+void addBook();
+void recordSale();
+void displayInventory();
+void displaySales();
+
+int main() {
+    int choice;
+    do {
+        printf("\nBookstore Inventory Management System\n");
+        printf("1. Add Book\n");
+        printf("2. Record Sale\n");
+        printf("3. Display Inventory\n");
+        printf("4. Display Sales Records\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                recordSale();
+                break;
+            case 3:
+                displayInventory();
+                break;
+            case 4:
+                displaySales();
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a number from 1 to 5.\n");
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
+
+void addBook() {
+    if (numBooks < MAX_BOOKS) {
+        struct Book newBook;
+        printf("Enter Book ID: ");
+        scanf("%d", &newBook.bookID);
+        printf("Enter Title: ");
+        scanf(" %[^\n]s", newBook.title);
+        printf("Enter Author: ");
+        scanf(" %[^\n]s", newBook.author);
+        printf("Enter Stock Quantity: ");
+        scanf("%d", &newBook.stockQuantity);
+        printf("Enter Price: ");
+        scanf("%f", &newBook.price);
+        
+        inventory[numBooks++] = newBook;
+        printf("Book added successfully.\n");
+    } else {
+        printf("Cannot add more books. Inventory is full.\n");
+    }
+}
+
+void recordSale() {
+    if (numBooks == 0) {
+        printf("Inventory is empty. Add books before recording a sale.\n");
+        return;
+    }
+
+    if (numSales < MAX_SALES) {
+        struct SalesRecord newSale;
+        printf("Enter Book ID sold: ");
+        scanf("%d", &newSale.bookID);
+        printf("Enter Quantity sold: ");
+        scanf("%d", &newSale.quantitySold);
+        printf("Enter Total Price: ");
+        scanf("%f", &newSale.totalPrice);
+        
+        salesRecords[numSales++] = newSale;
+        printf("Sale recorded successfully.\n");
+    } else {
+        printf("Cannot record more sales. Maximum sales records reached.\n");
+    }
+}
+
+void displayInventory() {
+    if (numBooks == 0) {
+        printf("Inventory is empty.\n");
+        return;
+    }
+
+    printf("\nInventory:\n");
+    for (int i = 0; i < numBooks; ++i) {
+        printf("Book ID: %d\n", inventory[i].bookID);
+        printf("Title: %s\n", inventory[i].title);
+        printf("Author: %s\n", inventory[i].author);
+        printf("Stock Quantity: %d\n", inventory[i].stockQuantity);
+        printf("Price: %.2f\n\n", inventory[i].price);
+    }
+}
+
+void displaySales() {
+    if (numSales == 0) {
+        printf("No sales records found.\n");
+        return;
+    }
+
+    printf("\nSales Records:\n");
+    for (int i = 0; i < numSales; ++i) {
+        printf("Sale ID: %d\n", i + 1);
+        printf("Book ID: %d\n", salesRecords[i].bookID);
+        printf("Quantity Sold: %d\n", salesRecords[i].quantitySold);
+        printf("Total Price: %.2f\n\n", salesRecords[i].totalPrice);
+    }
+}
